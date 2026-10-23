@@ -38,62 +38,111 @@ int main() {
     // keep displaying the menu until the user chooses to exit
     int choice = 0;
 
-    while (choice != 4) {
+    while (choice != 6) {
         // display menu
-        cout << "\n1. Increase Friendship" << endl;
-        cout << "2. Decrease Friendship" << endl;
-        cout << "3. Search for Villager" << endl;
-        cout << "4. Exit" << endl;
+        cout << "\n1. Add Villager" << endl;
+        cout << "2. Delete Villager" << endl;
+        cout << "3. Increase Friendship" << endl;
+        cout << "4. Decrease Friendship" << endl;
+        cout << "5. Search for Villager" << endl;
+        cout << "6. Exit" << endl;
+
         // get user choice
         cout << "Enter choice: ";
         cin >> choice;
 
-        // increase or decrease friendship based on user choice
-        if (choice == 1 || choice == 2) {
-            // ask which villager to update
+
+        if (choice == 1) {
             string name;
+            int friendshipLevel;
+            string species;
+            string catchphrase;
+
             cout << "Villager name: ";
             cin >> name;
 
-            // search for villager by name
+            // check whether the villager is already in the map
+            if (villagers.find(name) != villagers.end()) {
+                cout << name << " already exists." << endl;
+            } else {
+                cout << "Friendship level: ";
+                cin >> friendshipLevel;
+
+                if (friendshipLevel >= 0 && friendshipLevel <= 10) {
+                    cout << "Species: ";
+                    cin >> species;
+
+                    cout << "Catchphrase: ";
+                    cin.ignore();
+                    getline(cin, catchphrase);
+
+                    villagers[name] = make_tuple(
+                        friendshipLevel, species, catchphrase
+                    );
+
+                    cout << name << " added." << endl;
+                } else {
+                    cout << "Friendship level must be between 0 and 10."
+                         << endl;
+                }
+            }
+
+            displayVillagers(villagers);
+        }
+        else if (choice == 2) {
+            string name;
+
+            cout << "Villager name: ";
+            cin >> name;
+
+            if (villagers.erase(name) > 0) {
+                cout << name << " deleted." << endl;
+            } else {
+                cout << name << " not found." << endl;
+            }
+
+            displayVillagers(villagers);
+        }
+        else if (choice == 3 || choice == 4) {
+            string name;
+
+            cout << "Villager name: ";
+            cin >> name;
+
             auto it = villagers.find(name);
 
             if (it != villagers.end()) {
-                // get villager's current friendship level
                 int friendship = get<0>(it->second);
 
-                if (choice == 1) {
-                    // increase friendship lvl by 1, up to max of 10
+                if (choice == 3) {
                     if (friendship < 10) {
                         get<0>(it->second) = friendship + 1;
                         cout << name << "'s friendship increased." << endl;
                     } else {
-                        cout << name << "'s friendship is already 10." << endl;
+                        cout << name << "'s friendship is already 10."
+                             << endl;
                     }
                 } else {
                     if (friendship > 0) {
-                        // decrease friendship lvl by 1, down to min of 0
                         get<0>(it->second) = friendship - 1;
                         cout << name << "'s friendship decreased." << endl;
                     } else {
-                        cout << name << "'s friendship is already 0." << endl;
+                        cout << name << "'s friendship is already 0."
+                             << endl;
                     }
                 }
             } else {
                 cout << name << " not found." << endl;
             }
 
-            // display updated villager info
             displayVillagers(villagers);
         }
-        // search for villager by name and display their info
-        else if (choice == 3) {
-            // ask which villager to search for
+        else if (choice == 5) {
             string name;
+
             cout << "Villager name: ";
             cin >> name;
 
-            // look up villager in the map
             auto it = villagers.find(name);
 
             if (it != villagers.end()) {
@@ -108,13 +157,11 @@ int main() {
 
             displayVillagers(villagers);
         }
-        // exit the program
-        else if (choice == 4) {
+        else if (choice == 6) {
             cout << "Goodbye!" << endl;
         }
-        // handle invalid input
         else {
-            cout << "Invalid choice. Please choose 1-4." << endl;
+            cout << "Invalid choice. Please choose 1-6." << endl;
         }
     }
 
