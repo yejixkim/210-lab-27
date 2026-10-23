@@ -31,10 +31,6 @@ int main() {
     villagers["Kyle"] = make_tuple(10, "Wolf", "Hubba hubba!");
     villagers["Raymond"] = make_tuple(8, "Cat", "Nice fit");
 
-    villagers.insert({
-        "Del", make_tuple(8, "Alligator", "Got a snack?")
-    });
-
     // keep displaying the menu until the user chooses to exit
     int choice = 0;
 
